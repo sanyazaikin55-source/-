@@ -1,50 +1,78 @@
 window.externalTemplates = {
     // ==================== ИСКОВЫЕ ЗАЯВЛЕНИЯ (claim) ====================
     'claim-damage-crime': {
-        category: 'claim',
-        title: 'О возмещении вреда, причиненного преступлением',
-        fields: [
-            { name: 'court', label: 'Наименование суда', type: 'text', placeholder: 'Курганский городской суд' },
-            { name: 'court_address', label: 'Адрес суда', type: 'text', placeholder: '640000, г. Курган, ул. Судейская, д. 101' },
-            { name: 'plaintiff', label: 'Истец (ФИО)', type: 'text', placeholder: 'Иванов Иван Иванович' },
-            { name: 'plaintiff_address', label: 'Адрес истца', type: 'text', placeholder: 'г. Курган, ул. Советская, д. 110, кв. 5' },
-            { name: 'plaintiff_phone', label: 'Телефон истца', type: 'text', placeholder: '+7 (111) 111-11-11' },
-            { name: 'defendant', label: 'Ответчик (ФИО)', type: 'text', placeholder: 'Сидоров Сергей Петрович' },
-            { name: 'defendant_address', label: 'Адрес ответчика', type: 'text', placeholder: 'г. Курган, ул. Мира, д. 111, кв. 4' },
-            { name: 'defendant_phone', label: 'Телефон ответчика', type: 'text', placeholder: '+7 (111) 111-22-22' },
-            { name: 'third_party', label: 'Третье лицо (если есть)', type: 'text', placeholder: 'ООО «Страховая компания»' },
-            { name: 'third_party_address', label: 'Адрес третьего лица', type: 'text', placeholder: 'г. Курган, ул. Страховщиков, д. 102' },
-            { name: 'crime_date', label: 'Дата преступления', type: 'text', placeholder: 'октябрь 2023' },
-            { name: 'property_damage', label: 'Материальный ущерб (руб.)', type: 'number', placeholder: '111000' },
-            { name: 'moral_damage', label: 'Моральный вред (руб.)', type: 'number', placeholder: '50000' },
-            { name: 'conviction_date', label: 'Дата приговора суда', type: 'text', placeholder: '25 декабря 2023 года' }
-        ],
-        template: (data) => `
-            <div class="court-line">В ${data.court || '_______________'}</div>
-            <div class="court-address">${data.court_address || '_______________'}</div>
-            <div class="party-line">Истец: ${data.plaintiff || '_______________'}</div>
-            <div class="party-line">Адрес: ${data.plaintiff_address || '_______________'}</div>
-            <div class="party-line">Телефон: ${data.plaintiff_phone || '_______________'}</div>
-            <div class="party-line">Ответчик: ${data.defendant || '_______________'}</div>
-            <div class="party-line">Адрес: ${data.defendant_address || '_______________'}</div>
-            <div class="party-line">Телефон: ${data.defendant_phone || '_______________'}</div>
-            <div class="party-line">Третье лицо: ${data.third_party || '_______________'}</div>
-            <div class="party-line">Адрес: ${data.third_party_address || '_______________'}</div>
-            <div class="doc-title">ИСКОВОЕ ЗАЯВЛЕНИЕ о возмещении вреда, причиненного преступлением</div>
-            <div class="text-block">С ${data.crime_date || '_______________'} я, ${data.plaintiff || '_______________'}, являясь собственником квартиры, временно отсутствовал. По возвращении обнаружил, что квартира была ограблена, имущество повреждено. Приговором ${data.court || '_______________'} от ${data.conviction_date || '_______________'} ответчик признан виновным в совершении преступления. Действия ответчика нанесли мне материальный ущерб на сумму ${data.property_damage || '_______'} руб., а также причинили физические и нравственные страдания.</div>
-            <div class="text-block">Ответчик до настоящего времени не возместил ущерб добровольно.</div>
-            <div class="legal-ref">На основании ст. 1064, 151 ГК РФ,</div>
-            <div class="request-title">ПРОШУ:</div>
-            <div class="request-item">1. Взыскать с ответчика в мою пользу материальный ущерб в размере ${data.property_damage || '_______'} руб.</div>
-            <div class="request-item">2. Взыскать компенсацию морального вреда в размере ${data.moral_damage || '_______'} руб.</div>
-            <div class="request-item">3. Взыскать судебные расходы.</div>
-            <div style="display: flex; justify-content: space-between; width: 100%; margin-top: 2em;">
-                <table style="border-collapse: collapse; width: auto;"><tr><td style="border: none; padding: 0;">Дата: ${new Date().toLocaleDateString('ru-RU')}</td></tr></table>
-                <table style="border-collapse: collapse; width: auto;"><tr><td style="border: none; padding: 0;">${data.plaintiff || '_______________'} _________________</td></tr></table>
-            </div>
-        `
-    },
-    'claim-damage-health': {
+  category: 'claim',
+  title: 'О возмещении вреда, причиненного преступлением',
+  fields: [
+    { name: 'court', label: 'Наименование суда', type: 'text', placeholder: 'Курганский городской суд' },
+    { name: 'court_address', label: 'Адрес суда', type: 'text', placeholder: '640000, г. Курган, ул. Судейская, д. 101' },
+    { name: 'plaintiff', label: 'Истец (ФИО)', type: 'text', placeholder: 'Иванов Иван Иванович' },
+    { name: 'plaintiff_address', label: 'Адрес истца', type: 'text', placeholder: 'г. Курган, ул. Советская, д. 110, кв. 5' },
+    { name: 'plaintiff_phone', label: 'Телефон истца', type: 'text', placeholder: '+7 (111) 111-11-11' },
+    { name: 'defendant', label: 'Ответчик (ФИО)', type: 'text', placeholder: 'Сидоров Сергей Петрович' },
+    { name: 'defendant_address', label: 'Адрес ответчика', type: 'text', placeholder: 'г. Курган, ул. Мира, д. 111, кв. 4' },
+    { name: 'defendant_phone', label: 'Телефон ответчика', type: 'text', placeholder: '+7 (111) 111-22-22' },
+    { name: 'third_party', label: 'Третье лицо (если есть)', type: 'text', placeholder: 'ООО «Страховая компания»' },
+    { name: 'third_party_address', label: 'Адрес третьего лица', type: 'text', placeholder: 'г. Курган, ул. Страховщиков, д. 102' },
+    { name: 'third_party_phone', label: 'Телефон третьего лица', type: 'text', placeholder: '+7 (111) 111-33-33' },
+    { name: 'crime_date', label: 'Дата преступления (период)', type: 'text', placeholder: 'с 15 октября 2023 года по 1 ноября 2023 года' },
+    { name: 'property_damage', label: 'Материальный ущерб (руб.)', type: 'number', placeholder: '111000' },
+    { name: 'moral_damage', label: 'Моральный вред (руб.)', type: 'number', placeholder: '50000' },
+    { name: 'conviction_date', label: 'Дата приговора суда', type: 'text', placeholder: '25 декабря 2023 года' },
+    { name: 'valuation_date', label: 'Дата оценки ущерба', type: 'text', placeholder: '5 января 2024 года' }
+  ],
+  template: (data) => `
+    <div class="court-line">В ${data.court || '_______________'}</div>
+    <div class="court-address">${data.court_address || '_______________'}</div>
+
+    <div class="party-line">Истец: ${data.plaintiff || '_______________'}</div>
+    <div class="party-line">Адрес: ${data.plaintiff_address || '_______________'}</div>
+    <div class="party-line">Телефон: ${data.plaintiff_phone || '_______________'}</div>
+
+    <div class="party-line">Ответчик: ${data.defendant || '_______________'}</div>
+    <div class="party-line">Адрес: ${data.defendant_address || '_______________'}</div>
+    <div class="party-line">Телефон: ${data.defendant_phone || '_______________'}</div>
+
+    <div class="party-line">Третье лицо: ${data.third_party || '_______________'}</div>
+    <div class="party-line">Адрес: ${data.third_party_address || '_______________'}</div>
+    <div class="party-line">Телефон: ${data.third_party_phone || '_______________'}</div>
+
+    <div class="doc-title">ИСКОВОЕ ЗАЯВЛЕНИЕ о возмещении вреда, причиненного преступлением</div>
+
+    <div class="text-block">
+      С ${data.crime_date || '_______________'} я, ${data.plaintiff || '_______________'}, являясь собственником квартиры по адресу: ${data.plaintiff_address || '_______________'}, временно отсутствовал в связи с командировкой. По возвращении я обнаружил, что моя квартира была ограблена, а имущество повреждено. По данному факту я обратился в правоохранительные органы, и по итогам расследования было установлено, что ответчик ${data.defendant || '_______________'} проник в мое жилище с целью совершения кражи, повредив при этом входную дверь и мебель.
+    </div>
+    <div class="text-block">
+      ${data.conviction_date || '_______________'} ${data.court || '_______________'} признал ответчика виновным в совершении преступления, предусмотренного частью 3 статьи 158 Уголовного кодекса Российской Федерации (кража с незаконным проникновением в жилище). Приговором суда установлено, что действия ответчика нанесли мне материальный ущерб на сумму ${data.property_damage || '_______'} рублей, а также причинили мне значительные физические и нравственные страдания, что выражается в необходимости длительного восстановления имущества и переживания стресса, связанного с нарушением неприкосновенности моего жилища.
+    </div>
+    <div class="text-block">
+      С учетом вышеизложенного, по смыслу положений статей 1064 и 151 Гражданского кодекса Российской Федерации, обязанность по возмещению как материального ущерба, так и морального вреда, лежит на ответчике. Ответчик до настоящего времени не возместил мне причиненный ущерб добровольно, в связи с чем я вынужден обратиться в суд с данным иском.
+    </div>
+
+    <div class="legal-ref">
+      На основании вышеизложенного, руководствуясь статьями 1064, 151 Гражданского кодекса Российской Федерации, статьями 131 и 132 Гражданского процессуального кодекса Российской Федерации,
+    </div>
+
+    <div class="request-title">ПРОШУ СУД:</div>
+    <div class="request-item">1. Взыскать с ответчика ${data.defendant || '_______________'} в мою пользу сумму возмещения материального ущерба в размере ${data.property_damage || '_______'} рублей.</div>
+    <div class="request-item">2. Взыскать с ответчика компенсацию морального вреда в размере ${data.moral_damage || '_______'} рублей.</div>
+    <div class="request-item">3. Взыскать с ответчика все судебные расходы, связанные с рассмотрением данного дела.</div>
+
+    <div class="attachments-title">ПРИЛОЖЕНИЯ:</div>
+    <div class="attachment-item">– Копия искового заявления для ответчика и третьего лица;</div>
+    <div class="attachment-item">– Копия приговора ${data.court || '_______________'} от ${data.conviction_date || '_______________'};</div>
+    <div class="attachment-item">– Оценка ущерба от ${data.valuation_date || '_______________'};</div>
+    <div class="attachment-item">– Копии документов, подтверждающих имущественный вред (чеки, квитанции, фотографии);</div>
+    <div class="attachment-item">– Копии документов, подтверждающих направление искового заявления и приложений ответчику и третьему лицу;</div>
+    <div class="attachment-item">– Доверенность (если представляется представителем).</div>
+
+    <div style="display: flex; justify-content: space-between; width: 100%; margin-top: 2em;">
+      <table style="border-collapse: collapse; width: auto;"><tr><td style="border: none; padding: 0;">Дата: ${new Date().toLocaleDateString('ru-RU')}</td></tr></table>
+      <table style="border-collapse: collapse; width: auto;"><tr><td style="border: none; padding: 0;">${data.plaintiff || '_______________'} _________________</td></tr></table>
+    </div>
+  `
+},
+'claim-damage-health': {
         category: 'claim',
         title: 'О возмещении вреда здоровью',
         fields: [
