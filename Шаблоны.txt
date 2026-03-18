@@ -1745,7 +1745,7 @@ window.externalTemplates = {
 
     /* ===================== CLAIM (+15) ===================== */
     {
-      key: 'claim-alimony',
+      key: 'claim-alimony'{
   category: 'claim'
   title: 'О взыскании алиментов',
   fields: [
