@@ -1745,8 +1745,8 @@ window.externalTemplates = {
 
     /* ===================== CLAIM (+15) ===================== */
     {
-      key: 'claim-alimony': {
-  category: 'claim',
+      key: 'claim-alimony',
+  category: 'claim'
   title: 'О взыскании алиментов',
   fields: [
     { name: 'court', label: 'Наименование суда', type: 'text', placeholder: 'Курганский городской суд' },
