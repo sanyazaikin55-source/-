@@ -72,6 +72,80 @@ window.externalTemplates = {
     </div>
   `
 },
+'claim-alimony': {
+  category: 'claim',
+  title: 'О взыскании алиментов',
+  fields: [
+    { name: 'court', label: 'Наименование суда', type: 'text', placeholder: 'Курганский городской суд' },
+    { name: 'court_address', label: 'Адрес суда', type: 'text', placeholder: '640000, г. Курган, ул. 1010101, д. 10' },
+    { name: 'plaintiff', label: 'Истец (ФИО)', type: 'text', placeholder: 'Иванова Ирина Сергеевна' },
+    { name: 'plaintiff_address', label: 'Адрес истца', type: 'text', placeholder: '640001, г. Курган, ул. 110011, д. 11, кв. 1' },
+    { name: 'plaintiff_phone', label: 'Телефон истца', type: 'text', placeholder: '+7 (101) 101-1011' },
+    { name: 'defendant', label: 'Ответчик (ФИО)', type: 'text', placeholder: 'Петров Олег Викторович' },
+    { name: 'defendant_address', label: 'Адрес ответчика', type: 'text', placeholder: '640002, г. Курган, ул. 100101, д. 1, кв. 10' },
+    { name: 'defendant_phone', label: 'Телефон ответчика', type: 'text', placeholder: '+7 (101) 101-1001' },
+    { name: 'marriage_start_date', label: 'Дата начала брака', type: 'text', placeholder: '01.01.2010' },
+    { name: 'marriage_end_date', label: 'Дата окончания брака', type: 'text', placeholder: '01.01.2020' },
+    { name: 'child_name', label: 'ФИО ребенка', type: 'text', placeholder: 'Петров Иван Олегович' },
+    { name: 'child_birth_date', label: 'Дата рождения ребенка', type: 'text', placeholder: '01.01.2015' },
+    { name: 'divorce_date', label: 'Дата расторжения брака', type: 'text', placeholder: '01.01.2020' },
+    { name: 'divorce_certificate_number', label: 'Номер свидетельства о расторжении брака', type: 'text', placeholder: '№ 0101010101 от 01.01.2020' },
+    { name: 'child_residence_address', label: 'Адрес проживания ребенка с истцом', type: 'text', placeholder: 'г. Курган, ул. 110011, д. 11, кв. 1' },
+    { name: 'alimony_share', label: 'Доля от дохода (по умолчанию 1/4)', type: 'text', placeholder: '1/4' },
+    { name: 'alimony_fixed_amount', label: 'Фиксированная сумма (если доход нерегулярный)', type: 'text', placeholder: '10000 рублей' }
+  ],
+  template: (data) => `
+    <div class="court-line">В ${data.court || '_______________'}</div>
+    <div class="court-address">${data.court_address || '_______________'}</div>
+
+    <div class="party-line">Истец: ${data.plaintiff || '_______________'}</div>
+    <div class="party-line">Адрес: ${data.plaintiff_address || '_______________'}</div>
+    <div class="party-line">Телефон: ${data.plaintiff_phone || '_______________'}</div>
+
+    <div class="party-line">Ответчик: ${data.defendant || '_______________'}</div>
+    <div class="party-line">Адрес: ${data.defendant_address || '_______________'}</div>
+    <div class="party-line">Телефон: ${data.defendant_phone || '_______________'}</div>
+
+    <div class="doc-title">ИСКОВОЕ ЗАЯВЛЕНИЕ о взыскании алиментов</div>
+
+    <div class="text-block">
+      В период с ${data.marriage_start_date || '_______________'} по ${data.marriage_end_date || '_______________'} я, ${data.plaintiff || '_______________'}, состояла в зарегистрированном браке с ответчиком ${data.defendant || '_______________'}. От данного брака у нас родился сын — ${data.child_name || '_______________'}, ${data.child_birth_date || '_______________'} года рождения. Брак между мной и ответчиком был расторгнут ${data.divorce_date || '_______________'}, что подтверждается свидетельством о расторжении брака ${data.divorce_certificate_number || '_______________'}.
+    </div>
+    <div class="text-block">
+      На данный момент наш сын проживает вместе со мной по адресу: ${data.child_residence_address || data.plaintiff_address || '_______________'}. Ответчик не участвует в содержании ребенка, не предоставляет алиментные выплаты на его нужды, в связи с чем я вынуждена обратиться в суд за защитой прав моего ребенка на достойное содержание.
+    </div>
+    <div class="text-block">
+      С момента расторжения брака ответчик уклоняется от добровольной уплаты алиментов, не оказывает материальной поддержки нашему сыну, что негативно сказывается на его обеспечении всеми необходимыми средствами. Я неоднократно обращалась к ответчику с просьбой о добровольной выплате алиментов, но ответчик отказался от удовлетворения данной просьбы.
+    </div>
+    <div class="text-block">
+      В соответствии с положениями статьи 80 Семейного кодекса Российской Федерации, родители обязаны содержать своих несовершеннолетних детей. В силу статьи 81 Семейного кодекса РФ алименты на одного ребенка взыскиваются в размере ${data.alimony_share || '1/4'} части от доходов ответчика. Однако ответчик не предоставляет никакой помощи, несмотря на свои обязательства.
+    </div>
+
+    <div class="legal-ref">
+      На основании изложенного и руководствуясь статьями 80, 81 Семейного кодекса Российской Федерации, статьями 131, 132 Гражданского процессуального кодекса Российской Федерации,
+    </div>
+
+    <div class="request-title">ПРОШУ:</div>
+    <div class="request-item">
+      1. Взыскать с ответчика, ${data.defendant || '_______________'}, алименты на содержание несовершеннолетнего ${data.child_name || '_______________'}, ${data.child_birth_date || '_______________'} года рождения, в размере ${data.alimony_share || '1/4'} части всех видов доходов ежемесячно, начиная с момента подачи данного иска и до достижения ребенком совершеннолетия.
+    </div>
+    <div class="request-item">
+      2. Взыскать алименты в фиксированной денежной сумме в размере ${data.alimony_fixed_amount || '_______________'}, в случае если доход ответчика не может быть точно установлен или является нерегулярным.
+    </div>
+
+    <div class="attachments-title">ПРИЛОЖЕНИЯ:</div>
+    <div class="attachment-item">– Копия искового заявления для ответчика.</div>
+    <div class="attachment-item">– Копия свидетельства о рождении ребенка.</div>
+    <div class="attachment-item">– Копия свидетельства о расторжении брака.</div>
+    <div class="attachment-item">– Справка о составе семьи.</div>
+    <div class="attachment-item">– Документы, подтверждающие уклонение ответчика от уплаты алиментов (переписка, уведомления).</div>
+
+    <div style="display: flex; justify-content: space-between; width: 100%; margin-top: 2em;">
+      <table style="border-collapse: collapse; width: auto;"><tr><td style="border: none; padding: 0;">Дата: ${new Date().toLocaleDateString('ru-RU')}</td></tr></table>
+      <table style="border-collapse: collapse; width: auto;"><tr><td style="border: none; padding: 0;">${data.plaintiff || '_______________'} _________________</td></tr></table>
+    </div>
+  `
+},
 'claim-damage-health': {
         category: 'claim',
         title: 'О возмещении вреда здоровью',
