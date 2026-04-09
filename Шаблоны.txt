@@ -38,6 +38,7 @@ window.signBlock = function(leftText, rightText) {
 
 window.externalTemplates = {
   // ==================== ИСКОВЫЕ ЗАЯВЛЕНИЯ (claim) ====================
+
   'claim-damage-crime': {
     category: 'claim',
     title: 'О возмещении вреда, причиненного преступлением',
@@ -55,7 +56,8 @@ window.externalTemplates = {
       { name: 'crime_date', label: 'Дата преступления', type: 'text', placeholder: 'октябрь 2023' },
       { name: 'property_damage', label: 'Материальный ущерб (руб.)', type: 'number', placeholder: '111000' },
       { name: 'moral_damage', label: 'Моральный вред (руб.)', type: 'number', placeholder: '50000' },
-      { name: 'conviction_date', label: 'Дата приговора суда', type: 'text', placeholder: '25 декабря 2023 года' }
+      { name: 'conviction_date', label: 'Дата приговора суда', type: 'text', placeholder: '25 декабря 2023 года' },
+      { name: 'crime_desc', label: 'Описание преступления (кратко)', type: 'textarea', placeholder: 'кража из квартиры, повреждение имущества' }
     ],
     template: (data) => `
       <div class="court-line">В ${data.court || '_______________'}</div>
@@ -68,23 +70,21 @@ window.externalTemplates = {
       <div class="party-line">Телефон: ${data.defendant_phone || '_______________'}</div>
       <div class="party-line">Третье лицо: ${data.third_party || '_______________'}</div>
       <div class="party-line">Адрес: ${data.third_party_address || '_______________'}</div>
-      <div class="doc-title">ИСКОВОЕ ЗАЯВЛЕНИЕ о возмещении вреда, причиненного преступлением</div>
-      <div class="text-block">С ${data.crime_date || '_______________'} я, ${data.plaintiff || '_______________'}, являясь собственником квартиры, временно отсутствовал. По возвращении обнаружил, что квартира была ограблена, имущество повреждено. Приговором ${data.court || '_______________'} от ${data.conviction_date || '_______________'} ответчик признан виновным в совершении преступления. Действия ответчика нанесли мне материальный ущерб на сумму ${data.property_damage || '_______'} руб., а также причинили физические и нравственные страдания.</div>
+      <div class="doc-title">ИСКОВОЕ ЗАЯВЛЕНИЕ<br>о возмещении вреда, причиненного преступлением</div>
+      <div class="text-block">С ${data.crime_date || '_______________'} я, ${data.plaintiff || '_______________'}, являясь собственником квартиры, временно отсутствовал. По возвращении обнаружил, что квартира была ограблена, имущество повреждено. Приговором ${data.court || '_______________'} от ${data.conviction_date || '_______________'} ответчик признан виновным в совершении преступления: ${data.crime_desc || '_______________'}. Действия ответчика нанесли мне материальный ущерб на сумму ${data.property_damage || '_______'} руб., а также причинили физические и нравственные страдания.</div>
       <div class="text-block">Ответчик до настоящего времени не возместил ущерб добровольно.</div>
-      <div class="legal-ref">На основании ст. 1064, 151 ГК РФ,</div>
+      <div class="legal-ref">На основании ст. 1064, 151, 1099 ГК РФ, ст. 44 УПК РФ,</div>
       <div class="request-title">ПРОШУ:</div>
       <div class="request-item">1. Взыскать с ответчика в мою пользу материальный ущерб в размере ${data.property_damage || '_______'} руб.</div>
       <div class="request-item">2. Взыскать компенсацию морального вреда в размере ${data.moral_damage || '_______'} руб.</div>
       <div class="request-item">3. Взыскать судебные расходы.</div>
-      <div style="display: flex; justify-content: space-between; width: 100%; margin-top: 2em;">
-        <table style="border-collapse: collapse; width: auto;"><tr><td style="border: none; padding: 0;">Дата: ${new Date().toLocaleDateString('ru-RU')}</td></tr></table>
-        <table style="border-collapse: collapse; width: auto;"><tr><td style="border: none; padding: 0;">${data.plaintiff || '_______________'} _________________</td></tr></table>
-      </div>
+      ${signBlock(`Дата: ${new Date().toLocaleDateString('ru-RU')}`, `${data.plaintiff || '_______________'} _________________`)}
     `
   },
+
   'claim-damage-health': {
     category: 'claim',
-    title: 'О возмещении вреда здоровью',
+    title: 'О возмещении вреда здоровью, причиненного ДТП',
     fields: [
       { name: 'court', label: 'Наименование суда', type: 'text', placeholder: 'Курганский городской суд' },
       { name: 'court_address', label: 'Адрес суда', type: 'text', placeholder: '111111, г. Курган, ул. Судейская, д. 10' },
@@ -97,7 +97,8 @@ window.externalTemplates = {
       { name: 'accident_date', label: 'Дата ДТП', type: 'date', placeholder: '2024-05-15' },
       { name: 'treatment_costs', label: 'Расходы на лечение (руб.)', type: 'number', placeholder: '111000' },
       { name: 'rehab_costs', label: 'Расходы на реабилитацию (руб.)', type: 'number', placeholder: '22000' },
-      { name: 'moral_damage', label: 'Компенсация морального вреда (руб.)', type: 'number', placeholder: '150000' }
+      { name: 'moral_damage', label: 'Компенсация морального вреда (руб.)', type: 'number', placeholder: '150000' },
+      { name: 'lost_earnings', label: 'Утраченный заработок (руб.)', type: 'number', placeholder: '50000' }
     ],
     template: (data) => `
       <div class="court-line">В ${data.court || '_______________'}</div>
@@ -108,20 +109,19 @@ window.externalTemplates = {
       <div class="party-line">Ответчик: ${data.defendant || '_______________'}</div>
       <div class="party-line">Адрес: ${data.defendant_address || '_______________'}</div>
       <div class="party-line">Телефон: ${data.defendant_phone || '_______________'}</div>
-      <div class="doc-title">ИСКОВОЕ ЗАЯВЛЕНИЕ о возмещении вреда здоровью</div>
-      <div class="text-block">${data.accident_date || '_______________'} на перекрестке улиц Советская и Ленина в г. Курган произошло ДТП, в результате которого я получил повреждения здоровья. Виновником признан ответчик. В результате аварии я получил травмы, расходы на лечение составили ${data.treatment_costs || '_______'} руб., расходы на реабилитацию и лекарства — ${data.rehab_costs || '_______'} руб. Действия ответчика причинили мне физические и моральные страдания.</div>
-      <div class="legal-ref">На основании ст. 1064, 1079, 1085, 1099 ГК РФ,</div>
+      <div class="doc-title">ИСКОВОЕ ЗАЯВЛЕНИЕ<br>о возмещении вреда здоровью, причиненного дорожно-транспортным происшествием</div>
+      <div class="text-block">${dateRu(data.accident_date)} на перекрестке улиц Советская и Ленина в г. Курган произошло ДТП, в результате которого я получил повреждения здоровья. Виновником признан ответчик. В результате аварии я получил травмы, расходы на лечение составили ${money(data, 'treatment_costs')} руб., расходы на реабилитацию и лекарства — ${money(data, 'rehab_costs')} руб., утраченный заработок — ${money(data, 'lost_earnings')} руб. Действия ответчика причинили мне физические и моральные страдания.</div>
+      <div class="legal-ref">На основании ст. 1064, 1079, 1085, 1086, 1099-1101 ГК РФ,</div>
       <div class="request-title">ПРОШУ:</div>
-      <div class="request-item">1. Взыскать с ответчика расходы на лечение в размере ${data.treatment_costs || '_______'} руб.</div>
-      <div class="request-item">2. Взыскать расходы на реабилитацию и лекарства в размере ${data.rehab_costs || '_______'} руб.</div>
-      <div class="request-item">3. Взыскать компенсацию морального вреда в размере ${data.moral_damage || '_______'} руб.</div>
-      <div class="request-item">4. Взыскать судебные расходы.</div>
-      <div style="display: flex; justify-content: space-between; width: 100%; margin-top: 2em;">
-        <table style="border-collapse: collapse; width: auto;"><tr><td style="border: none; padding: 0;">Дата: ${new Date().toLocaleDateString('ru-RU')}</td></tr></table>
-        <table style="border-collapse: collapse; width: auto;"><tr><td style="border: none; padding: 0;">${data.plaintiff || '_______________'} _________________</td></tr></table>
-      </div>
+      <div class="request-item">1. Взыскать с ответчика расходы на лечение в размере ${money(data, 'treatment_costs')} руб.</div>
+      <div class="request-item">2. Взыскать расходы на реабилитацию и лекарства в размере ${money(data, 'rehab_costs')} руб.</div>
+      <div class="request-item">3. Взыскать утраченный заработок в размере ${money(data, 'lost_earnings')} руб.</div>
+      <div class="request-item">4. Взыскать компенсацию морального вреда в размере ${money(data, 'moral_damage')} руб.</div>
+      <div class="request-item">5. Взыскать судебные расходы.</div>
+      ${signBlock(`Дата: ${new Date().toLocaleDateString('ru-RU')}`, `${data.plaintiff || '_______________'} _________________`)}
     `
   },
+
   'claim-debt-loan': {
     category: 'claim',
     title: 'О взыскании долга по договору займа',
@@ -137,6 +137,7 @@ window.externalTemplates = {
       { name: 'loan_date', label: 'Дата займа', type: 'date' },
       { name: 'loan_amount', label: 'Сумма займа (руб.)', type: 'number' },
       { name: 'due_date', label: 'Срок возврата (дата)', type: 'date' },
+      { name: 'interest_rate', label: 'Процентная ставка (% годовых)', type: 'number', placeholder: 'если предусмотрена' },
       { name: 'pretension_date', label: 'Дата претензии (если направлялась)', type: 'date' }
     ],
     template: (data) => `
@@ -151,18 +152,20 @@ window.externalTemplates = {
         `Тел.: ${val(data, 'defendant_phone')}`
       ])}
       <div class="doc-title">ИСКОВОЕ ЗАЯВЛЕНИЕ<br>о взыскании долга по договору займа</div>
-      ${p(`${dateRu(data.loan_date)} между мной и ответчиком был заключён договор займа (займ передан ответчику). Сумма займа составила ${money(data, 'loan_amount')} руб. Срок возврата — ${dateRu(data.due_date)}.`)}
+      ${p(`${dateRu(data.loan_date)} между мной и ответчиком был заключён договор займа, по которому ответчик получил денежные средства в сумме ${money(data, 'loan_amount')} руб. со сроком возврата до ${dateRu(data.due_date)}. Факт передачи денег подтверждается распиской (или иными документами).`)}
       ${p(`До настоящего времени ответчик сумму займа не возвратил, обязательство не исполнил.`)}
-      ${p(`${data.pretension_date ? `Претензия направлялась ${dateRu(data.pretension_date)} (при наличии — приложить подтверждение).` : `Досудебное урегулирование осуществлялось по возможности; при наличии претензии/переписки — приложить.`}`)}
+      ${data.pretension_date ? p(`Претензия направлялась ${dateRu(data.pretension_date)} (прилагается подтверждение). Требования добровольно не удовлетворены.`) : p(`Досудебное урегулирование осуществлялось, однако ответчик уклоняется от исполнения обязательств.`)}
       <div class="legal-ref">На основании ст. 309, 310, 807–811 ГК РФ, ст. 131–132 ГПК РФ,</div>
       <div class="request-title">ПРОШУ:</div>
       ${reqBlock([
         `Взыскать с ${val(data, 'defendant')} в пользу ${val(data, 'plaintiff')} сумму долга по договору займа в размере ${money(data, 'loan_amount')} руб.`,
+        `Взыскать проценты за пользование займом (если предусмотрены договором) в размере ________ руб.`,
         `Взыскать судебные расходы, включая госпошлину.`
       ])}
       ${signBlock(`Дата: ${new Date().toLocaleDateString('ru-RU')}`, `${val(data, 'plaintiff')} _________________`)}
     `
   },
+
   'claim-debt-receipt': {
     category: 'claim',
     title: 'О взыскании долга по расписке',
@@ -196,6 +199,7 @@ window.externalTemplates = {
       ${signBlock(`Дата: ${new Date().toLocaleDateString('ru-RU')}`, `${val(data, 'plaintiff')} _________________`)}
     `
   },
+
   'claim-consumer-refund': {
     category: 'claim',
     title: 'О защите прав потребителя (возврат денег, неустойка, штраф)',
@@ -223,11 +227,11 @@ window.externalTemplates = {
       ${p(`${dateRu(data.purchase_date)} мной был(а) приобретён(а)/оплачен(а) ${val(data, 'product_service')} стоимостью ${money(data, 'price')} руб.`)}
       ${p(`Нарушение/недостаток: ${val(data, 'problem')}.`)}
       ${p(`Претензия направлена ${dateRu(data.claim_date)}. Требования добровольно не удовлетворены.`)}
-      <div class="legal-ref">На основании Закона РФ «О защите прав потребителей» (в т.ч. ст. 13, 15, 18/29, 22/31), ст. 309 ГК РФ, ст. 131–132 ГПК РФ,</div>
+      <div class="legal-ref">На основании Закона РФ «О защите прав потребителей» (ст. 13, 15, 18/29, 22/31), ст. 309 ГК РФ, ст. 131–132 ГПК РФ,</div>
       <div class="request-title">ПРОШУ:</div>
       ${reqBlock([
         `Взыскать с ответчика стоимость ${val(data, 'product_service')} в размере ${money(data, 'price')} руб.`,
-        `Взыскать неустойку (расчёт — по Закону о ЗПП, приложить).`,
+        `Взыскать неустойку за нарушение сроков удовлетворения требований потребителя (расчёт прилагается).`,
         `Взыскать компенсацию морального вреда (размер по усмотрению суда).`,
         `Взыскать штраф 50% от присуждённой суммы за неудовлетворение требований потребителя в добровольном порядке.`,
         `Взыскать судебные расходы.`
@@ -235,9 +239,10 @@ window.externalTemplates = {
       ${signBlock(`Дата: ${new Date().toLocaleDateString('ru-RU')}`, `${val(data, 'plaintiff')} _________________`)}
     `
   },
+
   'claim-salary-arrears': {
     category: 'claim',
-    title: 'О взыскании задолженности по заработной плате',
+    title: 'О взыскании задолженности по заработной плате и компенсации за задержку',
     fields: [
       { name: 'court', label: 'Суд', type: 'text' },
       { name: 'plaintiff', label: 'Истец (ФИО)', type: 'text' },
@@ -245,7 +250,8 @@ window.externalTemplates = {
       { name: 'employer', label: 'Ответчик (работодатель)', type: 'text' },
       { name: 'employer_address', label: 'Адрес работодателя', type: 'text' },
       { name: 'period', label: 'Период задолженности', type: 'text', placeholder: 'январь–март 2026' },
-      { name: 'amount', label: 'Сумма задолженности (руб.)', type: 'number' }
+      { name: 'amount', label: 'Сумма задолженности (руб.)', type: 'number' },
+      { name: 'compensation', label: 'Денежная компенсация по ст. 236 ТК РФ (руб.)', type: 'number', placeholder: 'расчёт прилагается' }
     ],
     template: (data) => `
       ${rightBlock([
@@ -255,16 +261,18 @@ window.externalTemplates = {
       ])}
       <div class="doc-title">ИСКОВОЕ ЗАЯВЛЕНИЕ<br>о взыскании задолженности по заработной плате</div>
       ${p(`Я состоял(а) в трудовых отношениях с ${val(data, 'employer')}. За период ${val(data, 'period')} заработная плата выплачена не полностью/не выплачена. Размер задолженности составляет ${money(data, 'amount')} руб. (расчёт прилагается).`)}
+      ${p(`В соответствии со ст. 236 ТК РФ за задержку выплаты подлежит взысканию денежная компенсация в размере ${money(data, 'compensation')} руб.`)}
       <div class="legal-ref">На основании ст. 22, 136, 140, 236 ТК РФ, ст. 131–132 ГПК РФ,</div>
       <div class="request-title">ПРОШУ:</div>
       ${reqBlock([
         `Взыскать с ответчика задолженность по заработной плате ${money(data, 'amount')} руб.`,
-        `Взыскать денежную компенсацию за задержку выплат по ст. 236 ТК РФ (расчёт прилагается).`,
+        `Взыскать денежную компенсацию за задержку выплат по ст. 236 ТК РФ в размере ${money(data, 'compensation')} руб.`,
         `Взыскать судебные расходы.`
       ])}
       ${signBlock(`Дата: ${new Date().toLocaleDateString('ru-RU')}`, `${val(data, 'plaintiff')} _________________`)}
     `
   },
+
   'claim-reinstatement': {
     category: 'claim',
     title: 'О восстановлении на работе и оплате времени вынужденного прогула',
@@ -295,6 +303,7 @@ window.externalTemplates = {
       ${signBlock(`Дата: ${new Date().toLocaleDateString('ru-RU')}`, `${val(data, 'plaintiff')} _________________`)}
     `
   },
+
   'claim-eviction': {
     category: 'claim',
     title: 'О выселении и снятии с регистрационного учёта (типовой)',
@@ -303,22 +312,24 @@ window.externalTemplates = {
       { name: 'plaintiff', label: 'Истец (ФИО)', type: 'text' },
       { name: 'defendant', label: 'Ответчик (ФИО)', type: 'text' },
       { name: 'address', label: 'Адрес жилого помещения', type: 'text' },
-      { name: 'basis', label: 'Основание (собственность/прекращение семейных отношений и т.п.)', type: 'textarea' }
+      { name: 'basis', label: 'Основание (собственность/прекращение семейных отношений и т.п.)', type: 'textarea' },
+      { name: 'absence_start', label: 'С какого времени ответчик не проживает', type: 'text', placeholder: 'с _____ года' }
     ],
     template: (data) => `
       ${rightBlock([`В ${val(data, 'court')}`, `Истец: ${val(data, 'plaintiff')}`, `Ответчик: ${val(data, 'defendant')}`])}
       <div class="doc-title">ИСКОВОЕ ЗАЯВЛЕНИЕ<br>о выселении и снятии с регистрационного учёта</div>
-      ${p(`Жилое помещение по адресу: ${val(data, 'address')}. Основания требований: ${val(data, 'basis')}. Ответчик право пользования жилым помещением утратил(а), добровольно не освобождает помещение.`)}
+      ${p(`Жилое помещение по адресу: ${val(data, 'address')}. Основания требований: ${val(data, 'basis')}. Ответчик добровольно выехал из жилого помещения ${val(data, 'absence_start')}, вывез свои вещи, не оплачивает коммунальные услуги, препятствий в пользовании жильём не имел. Право пользования жилым помещением ответчик утратил, добровольно сниматься с регистрационного учёта отказывается.`)}
       <div class="legal-ref">На основании ст. 209, 304 ГК РФ, ст. 31, 35 ЖК РФ (по ситуации), ст. 131–132 ГПК РФ,</div>
       <div class="request-title">ПРОШУ:</div>
       ${reqBlock([
-        `Выселить ${val(data, 'defendant')} из жилого помещения по адресу: ${val(data, 'address')}.`,
-        `Обязать уполномоченный орган снять ответчика с регистрационного учёта (при необходимости).`,
+        `Признать ${val(data, 'defendant')} утратившим(ей) право пользования жилым помещением по адресу: ${val(data, 'address')}.`,
+        `Обязать уполномоченный орган снять ответчика с регистрационного учёта.`,
         `Взыскать судебные расходы.`
       ])}
       ${signBlock(`Дата: ${new Date().toLocaleDateString('ru-RU')}`, `${val(data, 'plaintiff')} _________________`)}
     `
   },
+
   'claim-unjust-enrichment': {
     category: 'claim',
     title: 'О взыскании неосновательного обогащения',
@@ -333,7 +344,7 @@ window.externalTemplates = {
     template: (data) => `
       ${rightBlock([`В ${val(data, 'court')}`, `Истец: ${val(data, 'plaintiff')}`, `Ответчик: ${val(data, 'defendant')}`])}
       <div class="doc-title">ИСКОВОЕ ЗАЯВЛЕНИЕ<br>о взыскании неосновательного обогащения</div>
-      ${p(`${dateRu(data.transfer_date)} ответчик получил(а) от меня денежные средства в размере ${money(data, 'amount')} руб. при следующих обстоятельствах: ${val(data, 'circumstances')}. Правовых оснований для удержания денежных средств не имеется.`)}
+      ${p(`${dateRu(data.transfer_date)} ответчик получил(а) от меня денежные средства в размере ${money(data, 'amount')} руб. при следующих обстоятельствах: ${val(data, 'circumstances')}. Правовых оснований для удержания денежных средств не имеется. Направленная претензия оставлена без удовлетворения.`)}
       <div class="legal-ref">На основании ст. 1102–1109 ГК РФ, ст. 131–132 ГПК РФ,</div>
       <div class="request-title">ПРОШУ:</div>
       ${reqBlock([
@@ -343,6 +354,7 @@ window.externalTemplates = {
       ${signBlock(`Дата: ${new Date().toLocaleDateString('ru-RU')}`, `${val(data, 'plaintiff')} _________________`)}
     `
   },
+
   'claim-penalty-contract': {
     category: 'claim',
     title: 'О взыскании неустойки по договору (типовой)',
@@ -368,20 +380,22 @@ window.externalTemplates = {
       ${signBlock(`Дата: ${new Date().toLocaleDateString('ru-RU')}`, `${val(data, 'plaintiff')} _________________`)}
     `
   },
+
   'claim-alimony': {
     category: 'claim',
     title: 'О взыскании алиментов на несовершеннолетнего ребёнка (ГПК)',
     fields: [
       { name: 'court', label: 'Суд (наименование)', type: 'text', placeholder: '_______ районный суд г. _______' },
       { name: 'court_address', label: 'Адрес суда', type: 'text', placeholder: 'адрес суда' },
-      { name: 'plaintiff', label: 'Истец (ФИО/ИП)', type: 'text', placeholder: 'Иванов Иван Иванович / ИП Иванов И.И.' },
-      { name: 'plaintiff_address', label: 'Адрес истца', type: 'text', placeholder: 'адрес' },
-      { name: 'plaintiff_phone', label: 'Телефон истца', type: 'text', placeholder: '+7...' },
-      { name: 'defendant', label: 'Ответчик (ФИО/организация)', type: 'text', placeholder: 'Петров П.П. / ООО «Ромашка»' },
-      { name: 'defendant_address', label: 'Адрес ответчика', type: 'text', placeholder: 'адрес' },
-      { name: 'defendant_phone', label: 'Телефон ответчика (если известен)', type: 'text', placeholder: '+7...' },
-      { name: 'child', label: 'Ребёнок (ФИО, дата рождения)', type: 'text' },
-      { name: 'share', label: 'Размер алиментов (доля/твёрдая сумма)', type: 'text', placeholder: '1/4 дохода / ___ руб. ежемесячно' }
+      { name: 'plaintiff', label: 'Истец (ФИО)', type: 'text', placeholder: 'Иванова Мария Петровна' },
+      { name: 'plaintiff_address', label: 'Адрес истца', type: 'text' },
+      { name: 'plaintiff_phone', label: 'Телефон истца', type: 'text' },
+      { name: 'defendant', label: 'Ответчик (ФИО)', type: 'text', placeholder: 'Иванов Иван Иванович' },
+      { name: 'defendant_address', label: 'Адрес ответчика', type: 'text' },
+      { name: 'defendant_phone', label: 'Телефон ответчика (если известен)', type: 'text' },
+      { name: 'child', label: 'Ребёнок (ФИО, дата рождения)', type: 'text', placeholder: 'Иванов Сергей Иванович, 15.05.2015' },
+      { name: 'share', label: 'Размер алиментов (доля/твёрдая сумма)', type: 'text', placeholder: '1/4 дохода / 10 000 руб. ежемесячно' },
+      { name: 'marriage_status', label: 'Брак (зарегистрирован/расторгнут/не заключён)', type: 'text', placeholder: 'расторгнут ___.__.____' }
     ],
     template: (data) => `
       ${rightBlock([
@@ -393,28 +407,29 @@ window.externalTemplates = {
         `Ответчик: ${val(data, 'defendant')}`,
         `Адрес: ${val(data, 'defendant_address')}`
       ])}
-      <div class="doc-title">ИСКОВОЕ ЗАЯВЛЕНИЕ<br>о взыскании алиментов</div>
-      ${p(`У меня и ответчика имеется ребёнок: ${val(data, 'child')}. Ответчик добровольно участие в содержании ребёнка в необходимом объёме не принимает.`)}
-      ${p(`Прошу взыскать алименты в размере: ${val(data, 'share')}.`)}
+      <div class="doc-title">ИСКОВОЕ ЗАЯВЛЕНИЕ<br>о взыскании алиментов на несовершеннолетнего ребёнка</div>
+      ${p(`У меня и ответчика имеется несовершеннолетний ребёнок: ${val(data, 'child')}. Брак ${val(data, 'marriage_status')}. Ответчик добровольно участия в содержании ребёнка не принимает, материальной помощи не оказывает. Соглашение об уплате алиментов между нами не заключалось.`)}
+      ${p(`На основании ст. 80–83 СК РФ прошу взыскать алименты в размере: ${val(data, 'share')}.`)}
       <div class="legal-ref">На основании ст. 80–83, 107 СК РФ, ст. 131–132 ГПК РФ,</div>
       <div class="request-title">ПРОШУ:</div>
       ${reqBlock([
-        `Взыскать с ${val(data, 'defendant')} алименты на содержание ребёнка ${val(data, 'child')} в размере ${val(data, 'share')}.`,
-        `Взыскать судебные расходы (при наличии).`
+        `Взыскать с ${val(data, 'defendant')} алименты на содержание ребёнка ${val(data, 'child')} в размере ${val(data, 'share')} ежемесячно, начиная с даты подачи заявления до совершеннолетия ребёнка.`,
+        `Взыскать судебные расходы.`
       ])}
       ${signBlock(`Дата: ${new Date().toLocaleDateString('ru-RU')}`, `${val(data, 'plaintiff')} _________________`)}
     `
   },
+
   'claim-divorce': {
     category: 'claim',
     title: 'О расторжении брака (ГПК)',
     fields: [
       { name: 'court', label: 'Суд', type: 'text' },
       { name: 'court_address', label: 'Адрес суда', type: 'text' },
-      { name: 'plaintiff', label: 'Истец (ФИО/ИП)', type: 'text' },
+      { name: 'plaintiff', label: 'Истец (ФИО)', type: 'text' },
       { name: 'plaintiff_address', label: 'Адрес истца', type: 'text' },
       { name: 'plaintiff_phone', label: 'Телефон истца', type: 'text' },
-      { name: 'defendant', label: 'Ответчик (ФИО/организация)', type: 'text' },
+      { name: 'defendant', label: 'Ответчик (ФИО)', type: 'text' },
       { name: 'defendant_address', label: 'Адрес ответчика', type: 'text' },
       { name: 'defendant_phone', label: 'Телефон ответчика (если известен)', type: 'text' },
       { name: 'marriage_date', label: 'Дата заключения брака', type: 'date' },
@@ -435,27 +450,29 @@ window.externalTemplates = {
       <div class="doc-title">ИСКОВОЕ ЗАЯВЛЕНИЕ<br>о расторжении брака</div>
       ${p(`Брак между мной и ответчиком зарегистрирован ${dateRu(data.marriage_date)} в ${val(data, 'marriage_place')}.`)}
       ${p(`Дети: ${val(data, 'children')}.`)}
-      ${p(`Причины: ${val(data, 'reason')}. Совместная жизнь и сохранение семьи невозможны, примирение не достигнуто.`)}
+      ${p(`Причины: ${val(data, 'reason')}. Совместная жизнь и сохранение семьи невозможны, примирение не достигнуто. Спор о детях и разделе имущества отсутствует (либо урегулирован).`)}
       <div class="legal-ref">На основании ст. 21–23 СК РФ, ст. 131–132 ГПК РФ,</div>
       <div class="request-title">ПРОШУ:</div>
       ${reqBlock([`Расторгнуть брак между ${val(data, 'plaintiff')} и ${val(data, 'defendant')}, зарегистрированный ${dateRu(data.marriage_date)} в ${val(data, 'marriage_place')}.`])}
       ${signBlock(`Дата: ${new Date().toLocaleDateString('ru-RU')}`, `${val(data, 'plaintiff')} _________________`)}
     `
   },
+
   'claim-division-spouses': {
     category: 'claim',
     title: 'О разделе совместно нажитого имущества супругов (ГПК)',
     fields: [
       { name: 'court', label: 'Суд', type: 'text' },
       { name: 'court_address', label: 'Адрес суда', type: 'text' },
-      { name: 'plaintiff', label: 'Истец (ФИО/ИП)', type: 'text' },
+      { name: 'plaintiff', label: 'Истец (ФИО)', type: 'text' },
       { name: 'plaintiff_address', label: 'Адрес истца', type: 'text' },
       { name: 'plaintiff_phone', label: 'Телефон истца', type: 'text' },
-      { name: 'defendant', label: 'Ответчик (ФИО/организация)', type: 'text' },
+      { name: 'defendant', label: 'Ответчик (ФИО)', type: 'text' },
       { name: 'defendant_address', label: 'Адрес ответчика', type: 'text' },
       { name: 'defendant_phone', label: 'Телефон ответчика (если известен)', type: 'text' },
       { name: 'property', label: 'Имущество (перечень)', type: 'textarea' },
-      { name: 'price', label: 'Цена иска (руб.)', type: 'number' }
+      { name: 'price', label: 'Цена иска (руб.)', type: 'number' },
+      { name: 'marriage_end_date', label: 'Дата прекращения брачных отношений', type: 'date' }
     ],
     template: (data) => `
       ${rightBlock([
@@ -468,28 +485,31 @@ window.externalTemplates = {
         `Адрес: ${val(data, 'defendant_address')}`,
         `Цена иска: ${money(data, 'price')} руб.`
       ])}
-      <div class="doc-title">ИСКОВОЕ ЗАЯВЛЕНИЕ<br>о разделе имущества супругов</div>
-      ${p(`Между сторонами имеется спор о разделе совместно нажитого имущества.`)}
-      ${p(`Перечень имущества и позиция по разделу: ${val(data, 'property')}.`)}
+      <div class="doc-title">ИСКОВОЕ ЗАЯВЛЕНИЕ<br>о разделе совместно нажитого имущества супругов</div>
+      ${p(`Брак между сторонами прекращён (расторгнут либо фактически прекращён с ${dateRu(data.marriage_end_date)}). Совместное хозяйство не ведётся. Соглашение о добровольном разделе имущества не достигнуто.`)}
+      ${p(`В период брака сторонами совместно нажито следующее имущество: ${val(data, 'property')}.`)}
+      ${p(`Доли супругов в совместном имуществе признаются равными. Прошу произвести раздел следующим образом: ... (подробно в приложении).`)}
       <div class="legal-ref">На основании ст. 34, 38–39 СК РФ, ст. 131–132 ГПК РФ,</div>
       <div class="request-title">ПРОШУ:</div>
       ${reqBlock([
-        `Произвести раздел совместно нажитого имущества в соответствии с заявленными требованиями (перечень и распределение — в приложении/в тексте).`,
+        `Произвести раздел совместно нажитого имущества, выделив мне в собственность ..., ответчику — ...`,
+        `Взыскать с ответчика денежную компенсацию (если стоимость переданного имущества превышает долю).`,
         `Взыскать судебные расходы.`
       ])}
       ${signBlock(`Дата: ${new Date().toLocaleDateString('ru-RU')}`, `${val(data, 'plaintiff')} _________________`)}
     `
   },
+
   'claim-child-residence': {
     category: 'claim',
     title: 'Об определении места жительства ребёнка (ГПК)',
     fields: [
       { name: 'court', label: 'Суд', type: 'text' },
       { name: 'court_address', label: 'Адрес суда', type: 'text' },
-      { name: 'plaintiff', label: 'Истец (ФИО/ИП)', type: 'text' },
+      { name: 'plaintiff', label: 'Истец (ФИО)', type: 'text' },
       { name: 'plaintiff_address', label: 'Адрес истца', type: 'text' },
       { name: 'plaintiff_phone', label: 'Телефон истца', type: 'text' },
-      { name: 'defendant', label: 'Ответчик (ФИО/организация)', type: 'text' },
+      { name: 'defendant', label: 'Ответчик (ФИО)', type: 'text' },
       { name: 'defendant_address', label: 'Адрес ответчика', type: 'text' },
       { name: 'defendant_phone', label: 'Телефон ответчика (если известен)', type: 'text' },
       { name: 'child', label: 'Ребёнок (ФИО, дата рождения)', type: 'text' },
@@ -508,6 +528,7 @@ window.externalTemplates = {
       <div class="doc-title">ИСКОВОЕ ЗАЯВЛЕНИЕ<br>об определении места жительства ребёнка</div>
       ${p(`Ребёнок: ${val(data, 'child')}.`)}
       ${p(`Имеется спор о месте жительства ребёнка. Обстоятельства: ${val(data, 'circ')}.`)}
+      ${p(`Проживание ребёнка со мной будет наилучшим образом соответствовать его интересам (учитывая возраст, привязанность, материальные и жилищные условия, моральный климат).`)}
       <div class="legal-ref">На основании ст. 65, 66 СК РФ, ст. 131–132 ГПК РФ,</div>
       <div class="request-title">ПРОШУ:</div>
       ${reqBlock([
@@ -517,16 +538,17 @@ window.externalTemplates = {
       ${signBlock(`Дата: ${new Date().toLocaleDateString('ru-RU')}`, `${val(data, 'plaintiff')} _________________`)}
     `
   },
+
   'claim-child-communication': {
     category: 'claim',
     title: 'Об определении порядка общения с ребёнком (ГПК)',
     fields: [
       { name: 'court', label: 'Суд', type: 'text' },
       { name: 'court_address', label: 'Адрес суда', type: 'text' },
-      { name: 'plaintiff', label: 'Истец (ФИО/ИП)', type: 'text' },
+      { name: 'plaintiff', label: 'Истец (ФИО)', type: 'text' },
       { name: 'plaintiff_address', label: 'Адрес истца', type: 'text' },
       { name: 'plaintiff_phone', label: 'Телефон истца', type: 'text' },
-      { name: 'defendant', label: 'Ответчик (ФИО/организация)', type: 'text' },
+      { name: 'defendant', label: 'Ответчик (ФИО)', type: 'text' },
       { name: 'defendant_address', label: 'Адрес ответчика', type: 'text' },
       { name: 'defendant_phone', label: 'Телефон ответчика (если известен)', type: 'text' },
       { name: 'child', label: 'Ребёнок (ФИО, дата рождения)', type: 'text' },
@@ -544,26 +566,28 @@ window.externalTemplates = {
       ])}
       <div class="doc-title">ИСКОВОЕ ЗАЯВЛЕНИЕ<br>об определении порядка общения с ребёнком</div>
       ${p(`Ребёнок: ${val(data, 'child')}.`)}
-      ${p(`Ответчик препятствует общению. Прошу определить порядок общения: ${val(data, 'schedule')}.`)}
+      ${p(`Ответчик препятствует моему общению с ребёнком, что нарушает мои родительские права. Прошу определить порядок общения: ${val(data, 'schedule')}.`)}
       <div class="legal-ref">На основании ст. 66 СК РФ, ст. 131–132 ГПК РФ,</div>
       <div class="request-title">ПРОШУ:</div>
       ${reqBlock([
         `Определить порядок общения ${val(data, 'plaintiff')} с ребёнком ${val(data, 'child')} согласно графику: ${val(data, 'schedule')}.`,
+        `Обязать ответчика не чинить препятствий в общении.`,
         `Взыскать судебные расходы.`
       ])}
       ${signBlock(`Дата: ${new Date().toLocaleDateString('ru-RU')}`, `${val(data, 'plaintiff')} _________________`)}
     `
   },
+
   'claim-paternity': {
     category: 'claim',
     title: 'Об установлении отцовства и взыскании алиментов (ГПК)',
     fields: [
       { name: 'court', label: 'Суд', type: 'text' },
       { name: 'court_address', label: 'Адрес суда', type: 'text' },
-      { name: 'plaintiff', label: 'Истец (ФИО/ИП)', type: 'text' },
+      { name: 'plaintiff', label: 'Истец (ФИО)', type: 'text' },
       { name: 'plaintiff_address', label: 'Адрес истца', type: 'text' },
       { name: 'plaintiff_phone', label: 'Телефон истца', type: 'text' },
-      { name: 'defendant', label: 'Ответчик (ФИО/организация)', type: 'text' },
+      { name: 'defendant', label: 'Ответчик (ФИО)', type: 'text' },
       { name: 'defendant_address', label: 'Адрес ответчика', type: 'text' },
       { name: 'defendant_phone', label: 'Телефон ответчика (если известен)', type: 'text' },
       { name: 'child', label: 'Ребёнок (ФИО, дата рождения)', type: 'text' },
@@ -582,26 +606,28 @@ window.externalTemplates = {
       ])}
       <div class="doc-title">ИСКОВОЕ ЗАЯВЛЕНИЕ<br>об установлении отцовства и взыскании алиментов</div>
       ${p(`Ребёнок: ${val(data, 'child')}.`)}
-      ${p(`Обстоятельства: ${val(data, 'facts')}. Отцовство ответчиком добровольно не оформлено.`)}
+      ${p(`Обстоятельства: ${val(data, 'facts')}. Отцовство ответчика в отношении ребёнка не зарегистрировано, однако он фактически является отцом. Ответчик добровольно не подаёт заявление об установлении отцовства и не оказывает материальной помощи на содержание ребёнка.`)}
       <div class="legal-ref">На основании ст. 49, 80–83 СК РФ, ст. 131–132 ГПК РФ,</div>
       <div class="request-title">ПРОШУ:</div>
       ${reqBlock([
-        `Установить отцовство ${val(data, 'defendant')} в отношении ребёнка ${val(data, 'child')}.`,
-        `Взыскать алименты в размере ${val(data, 'share')}.`
+        `Установить, что ответчик ${val(data, 'defendant')} является отцом ребёнка ${val(data, 'child')}.`,
+        `Взыскать с ответчика алименты на содержание ребёнка в размере ${val(data, 'share')} ежемесячно.`,
+        `Взыскать судебные расходы.`
       ])}
       ${signBlock(`Дата: ${new Date().toLocaleDateString('ru-RU')}`, `${val(data, 'plaintiff')} _________________`)}
     `
   },
+
   'claim-inheritance-restore-term': {
     category: 'claim',
     title: 'О восстановлении срока принятия наследства (ГПК)',
     fields: [
       { name: 'court', label: 'Суд', type: 'text' },
       { name: 'court_address', label: 'Адрес суда', type: 'text' },
-      { name: 'plaintiff', label: 'Истец (ФИО/ИП)', type: 'text' },
+      { name: 'plaintiff', label: 'Истец (ФИО)', type: 'text' },
       { name: 'plaintiff_address', label: 'Адрес истца', type: 'text' },
       { name: 'plaintiff_phone', label: 'Телефон истца', type: 'text' },
-      { name: 'defendant', label: 'Ответчик (ФИО/организация)', type: 'text' },
+      { name: 'defendant', label: 'Ответчик (ФИО/нотариус)', type: 'text' },
       { name: 'defendant_address', label: 'Адрес ответчика', type: 'text' },
       { name: 'defendant_phone', label: 'Телефон ответчика (если известен)', type: 'text' },
       { name: 'decedent', label: 'Наследодатель (ФИО)', type: 'text' },
@@ -615,21 +641,22 @@ window.externalTemplates = {
         `Истец: ${val(data, 'plaintiff')}`,
         `Адрес: ${val(data, 'plaintiff_address')}`,
         `Тел.: ${val(data, 'plaintiff_phone')}`,
-        `Ответчик/заинтересованное лицо: ${val(data, 'defendant')}`,
+        `Заинтересованное лицо: ${val(data, 'defendant')}`,
         `Адрес: ${val(data, 'defendant_address')}`
       ])}
       <div class="doc-title">ИСКОВОЕ ЗАЯВЛЕНИЕ<br>о восстановлении срока принятия наследства</div>
       ${p(`Наследодатель: ${val(data, 'decedent')}, дата смерти: ${dateRu(data.death_date)}.`)}
-      ${p(`Срок принятия наследства пропущен по уважительным причинам: ${val(data, 'reasons')}.`)}
+      ${p(`Я являюсь наследником по закону (завещанию). Шестимесячный срок для принятия наследства пропущен по уважительным причинам: ${val(data, 'reasons')}.`)}
       <div class="legal-ref">На основании ст. 1155 ГК РФ, ст. 131–132 ГПК РФ,</div>
       <div class="request-title">ПРОШУ:</div>
       ${reqBlock([
-        `Восстановить срок для принятия наследства после смерти ${val(data, 'decedent')}.`,
-        `Признать меня принявшим(ей) наследство (при необходимости).`
+        `Восстановить мне срок для принятия наследства после смерти ${val(data, 'decedent')}.`,
+        `Признать меня принявшим(ей) наследство.`
       ])}
       ${signBlock(`Дата: ${new Date().toLocaleDateString('ru-RU')}`, `${val(data, 'plaintiff')} _________________`)}
     `
   },
+
   'claim-establish-kinship-fact': {
     category: 'claim',
     title: 'Об установлении факта родственных отношений (особое производство, ГПК)',
@@ -637,8 +664,9 @@ window.externalTemplates = {
       { name: 'court', label: 'Суд', type: 'text' },
       { name: 'applicant', label: 'Заявитель (ФИО)', type: 'text' },
       { name: 'interested', label: 'Заинтересованные лица (при наличии)', type: 'text' },
-      { name: 'fact', label: 'Какой факт установить', type: 'textarea', placeholder: 'что Иванов И.И. является отцом/матерью...' },
-      { name: 'purpose', label: 'Для чего нужно (цель)', type: 'textarea', placeholder: 'для оформления наследства...' }
+      { name: 'fact', label: 'Какой факт установить', type: 'textarea', placeholder: 'что Иванов И.И. является отцом...' },
+      { name: 'purpose', label: 'Для чего нужно (цель)', type: 'textarea', placeholder: 'для оформления наследства...' },
+      { name: 'evidence', label: 'Доказательства родства (документы, письма, показания)', type: 'textarea' }
     ],
     template: (data) => `
       ${rightBlock([
@@ -649,12 +677,14 @@ window.externalTemplates = {
       <div class="doc-title">ЗАЯВЛЕНИЕ<br>об установлении факта родственных отношений</div>
       ${p(`Прошу установить факт: ${val(data, 'fact')}.`)}
       ${p(`Цель установления факта: ${val(data, 'purpose')}.`)}
+      ${p(`Доказательства: ${val(data, 'evidence')}. Восстановить документы во внесудебном порядке невозможно.`)}
       <div class="legal-ref">На основании гл. 28 ГПК РФ,</div>
       <div class="request-title">ПРОШУ:</div>
-      ${reqBlock([`Установить указанный юридический факт.`])}
+      ${reqBlock([`Установить указанный юридический факт родственных отношений.`])}
       ${signBlock(`Дата: ${new Date().toLocaleDateString('ru-RU')}`, `${val(data, 'applicant')} _________________`)}
     `
   },
+
   'claim-establish-document-ownership-fact': {
     category: 'claim',
     title: 'Об установлении факта принадлежности правоустанавливающего документа (ГПК)',
@@ -670,26 +700,27 @@ window.externalTemplates = {
         `В ${val(data, 'court')}`,
         `Заявитель: ${val(data, 'applicant')}`
       ])}
-      <div class="doc-title">ЗАЯВЛЕНИЕ<br>об установлении факта принадлежности документа</div>
+      <div class="doc-title">ЗАЯВЛЕНИЕ<br>об установлении факта принадлежности правоустанавливающего документа</div>
       ${p(`Документ: ${val(data, 'doc')}.`)}
       ${p(`Несоответствие: ${val(data, 'issue')}.`)}
-      ${p(`Цель: ${val(data, 'purpose')}.`)}
-      <div class="legal-ref">На основании гл. 28 ГПК РФ,</div>
+      ${p(`Цель установления факта: ${val(data, 'purpose')}.`)}
+      <div class="legal-ref">На основании ст. 264–267 ГПК РФ,</div>
       <div class="request-title">ПРОШУ:</div>
-      ${reqBlock([`Установить факт принадлежности правоустанавливающего документа заявителю.`])}
+      ${reqBlock([`Установить факт принадлежности указанного правоустанавливающего документа заявителю.`])}
       ${signBlock(`Дата: ${new Date().toLocaleDateString('ru-RU')}`, `${val(data, 'applicant')} _________________`)}
     `
   },
+
   'claim-flood-damages': {
     category: 'claim',
     title: 'О возмещении ущерба от залива квартиры (ГПК)',
     fields: [
       { name: 'court', label: 'Суд', type: 'text' },
       { name: 'court_address', label: 'Адрес суда', type: 'text' },
-      { name: 'plaintiff', label: 'Истец (ФИО/ИП)', type: 'text' },
+      { name: 'plaintiff', label: 'Истец (ФИО)', type: 'text' },
       { name: 'plaintiff_address', label: 'Адрес истца', type: 'text' },
       { name: 'plaintiff_phone', label: 'Телефон истца', type: 'text' },
-      { name: 'defendant', label: 'Ответчик (ФИО/организация)', type: 'text' },
+      { name: 'defendant', label: 'Ответчик (ФИО/УК)', type: 'text' },
       { name: 'defendant_address', label: 'Адрес ответчика', type: 'text' },
       { name: 'defendant_phone', label: 'Телефон ответчика (если известен)', type: 'text' },
       { name: 'date', label: 'Дата залива', type: 'date' },
@@ -706,25 +737,26 @@ window.externalTemplates = {
         `Ответчик: ${val(data, 'defendant')}`,
         `Адрес: ${val(data, 'defendant_address')}`
       ])}
-      <div class="doc-title">ИСКОВОЕ ЗАЯВЛЕНИЕ<br>о возмещении ущерба (залив квартиры)</div>
-      ${p(`${dateRu(data.date)} произошёл залив, причинён ущерб на сумму ${money(data, 'damage')} руб.`)}
-      ${p(`Доказательства: ${val(data, 'evidence')}. Добровольно ущерб не возмещён.`)}
+      <div class="doc-title">ИСКОВОЕ ЗАЯВЛЕНИЕ<br>о возмещении ущерба, причинённого заливом квартиры</div>
+      ${p(`${dateRu(data.date)} произошёл залив принадлежащей мне квартиры по вине ответчика. Согласно акту о затоплении (иным доказательствам: ${val(data, 'evidence')}) причинён ущерб на сумму ${money(data, 'damage')} руб. (смета, заключение оценщика прилагаются).`)}
+      ${p(`Добровольно ущерб не возмещён.`)}
       <div class="legal-ref">На основании ст. 15, 1064 ГК РФ, ст. 131–132 ГПК РФ,</div>
       <div class="request-title">ПРОШУ:</div>
       ${reqBlock([
-        `Взыскать с ${val(data, 'defendant')} ущерб ${money(data, 'damage')} руб.`,
+        `Взыскать с ${val(data, 'defendant')} ущерб в размере ${money(data, 'damage')} руб.`,
         `Взыскать судебные расходы.`
       ])}
       ${signBlock(`Дата: ${new Date().toLocaleDateString('ru-RU')}`, `${val(data, 'plaintiff')} _________________`)}
     `
   },
+
   'claim-defamation': {
     category: 'claim',
     title: 'О защите чести, достоинства и деловой репутации (ГПК)',
     fields: [
       { name: 'court', label: 'Суд', type: 'text' },
       { name: 'court_address', label: 'Адрес суда', type: 'text' },
-      { name: 'plaintiff', label: 'Истец (ФИО/ИП)', type: 'text' },
+      { name: 'plaintiff', label: 'Истец (ФИО)', type: 'text' },
       { name: 'plaintiff_address', label: 'Адрес истца', type: 'text' },
       { name: 'plaintiff_phone', label: 'Телефон истца', type: 'text' },
       { name: 'defendant', label: 'Ответчик (ФИО/организация)', type: 'text' },
@@ -744,30 +776,31 @@ window.externalTemplates = {
         `Ответчик: ${val(data, 'defendant')}`,
         `Адрес: ${val(data, 'defendant_address')}`
       ])}
-      <div class="doc-title">ИСКОВОЕ ЗАЯВЛЕНИЕ<br>о защите чести и достоинства</div>
-      ${p(`Ответчик распространил сведения: ${val(data, 'info')}.`)}
-      ${p(`Доказательства: ${val(data, 'proof')}. Сведения не соответствуют действительности и порочат меня.`)}
+      <div class="doc-title">ИСКОВОЕ ЗАЯВЛЕНИЕ<br>о защите чести, достоинства и деловой репутации</div>
+      ${p(`Ответчик распространил в (указать способ) следующие сведения, не соответствующие действительности и порочащие меня: ${val(data, 'info')}.`)}
+      ${p(`Факт распространения подтверждается: ${val(data, 'proof')}.`)}
       <div class="legal-ref">На основании ст. 152, 151 ГК РФ, ст. 131–132 ГПК РФ,</div>
       <div class="request-title">ПРОШУ:</div>
       ${reqBlock([
-        `Признать сведения не соответствующими действительности.`,
-        `Обязать ответчика опровергнуть сведения.`,
-        `Взыскать компенсацию морального вреда ${money(data, 'moral')} руб.`,
+        `Признать распространённые сведения не соответствующими действительности, порочащими честь, достоинство и деловую репутацию истца.`,
+        `Обязать ответчика опровергнуть указанные сведения тем же способом.`,
+        `Взыскать компенсацию морального вреда в размере ${money(data, 'moral')} руб.`,
         `Взыскать судебные расходы.`
       ])}
       ${signBlock(`Дата: ${new Date().toLocaleDateString('ru-RU')}`, `${val(data, 'plaintiff')} _________________`)}
     `
   },
+
   'claim-395-interest': {
     category: 'claim',
     title: 'О взыскании процентов по ст. 395 ГК РФ (типовой)',
     fields: [
       { name: 'court', label: 'Суд', type: 'text' },
       { name: 'court_address', label: 'Адрес суда', type: 'text' },
-      { name: 'plaintiff', label: 'Истец (ФИО/ИП)', type: 'text' },
+      { name: 'plaintiff', label: 'Истец (ФИО)', type: 'text' },
       { name: 'plaintiff_address', label: 'Адрес истца', type: 'text' },
       { name: 'plaintiff_phone', label: 'Телефон истца', type: 'text' },
-      { name: 'defendant', label: 'Ответчик (ФИО/организация)', type: 'text' },
+      { name: 'defendant', label: 'Ответчик (ФИО)', type: 'text' },
       { name: 'defendant_address', label: 'Адрес ответчика', type: 'text' },
       { name: 'defendant_phone', label: 'Телефон ответчика (если известен)', type: 'text' },
       { name: 'principal', label: 'Основной долг (руб.)', type: 'number' },
@@ -784,31 +817,31 @@ window.externalTemplates = {
         `Ответчик: ${val(data, 'defendant')}`,
         `Адрес: ${val(data, 'defendant_address')}`
       ])}
-      <div class="doc-title">ИСКОВОЕ ЗАЯВЛЕНИЕ<br>о взыскании процентов за пользование чужими денежными средствами</div>
-      ${p(`Ответчик допустил просрочку возврата денежных средств (основной долг ${money(data, 'principal')} руб.) за период ${val(data, 'period')}.`)}
-      ${p(`Размер процентов по ст. 395 ГК РФ составляет ${money(data, 'interest')} руб. (расчёт прилагается).`)}
+      <div class="doc-title">ИСКОВОЕ ЗАЯВЛЕНИЕ<br>о взыскании процентов за пользование чужими денежными средствами (ст. 395 ГК РФ)</div>
+      ${p(`Ответчик неправомерно удерживает (уклоняется от возврата) денежные средства в размере ${money(data, 'principal')} руб. Период просрочки: ${val(data, 'period')}.`)}
+      ${p(`Размер процентов по ст. 395 ГК РФ за указанный период составляет ${money(data, 'interest')} руб. (расчёт прилагается).`)}
       <div class="legal-ref">На основании ст. 309, 310, 395 ГК РФ, ст. 131–132 ГПК РФ,</div>
       <div class="request-title">ПРОШУ:</div>
       ${reqBlock([
-        `Взыскать проценты по ст. 395 ГК РФ в размере ${money(data, 'interest')} руб.`,
+        `Взыскать с ответчика проценты за пользование чужими денежными средствами в размере ${money(data, 'interest')} руб.`,
         `Взыскать судебные расходы.`
       ])}
       ${signBlock(`Дата: ${new Date().toLocaleDateString('ru-RU')}`, `${val(data, 'plaintiff')} _________________`)}
     `
   },
+
   'claim-utility-recalc': {
     category: 'claim',
     title: 'О перерасчёте платы за ЖКУ/коммунальные услуги (типовой, ГПК)',
     fields: [
       { name: 'court', label: 'Суд', type: 'text' },
       { name: 'court_address', label: 'Адрес суда', type: 'text' },
-      { name: 'plaintiff', label: 'Истец (ФИО/ИП)', type: 'text' },
+      { name: 'plaintiff', label: 'Истец (ФИО)', type: 'text' },
       { name: 'plaintiff_address', label: 'Адрес истца', type: 'text' },
       { name: 'plaintiff_phone', label: 'Телефон истца', type: 'text' },
-      { name: 'defendant', label: 'Ответчик (ФИО/организация)', type: 'text' },
+      { name: 'defendant', label: 'Ответчик (УК/РСО)', type: 'text' },
       { name: 'defendant_address', label: 'Адрес ответчика', type: 'text' },
       { name: 'defendant_phone', label: 'Телефон ответчика (если известен)', type: 'text' },
-      { name: 'uk', label: 'УК/ресурсоснабжающая организация', type: 'text' },
       { name: 'period', label: 'Период', type: 'text' },
       { name: 'facts', label: 'Нарушение (качество/перерывы/начисления)', type: 'textarea' }
     ],
@@ -819,21 +852,22 @@ window.externalTemplates = {
         `Истец: ${val(data, 'plaintiff')}`,
         `Адрес: ${val(data, 'plaintiff_address')}`,
         `Тел.: ${val(data, 'plaintiff_phone')}`,
-        `Ответчик: ${val(data, 'uk')}`,
+        `Ответчик: ${val(data, 'defendant')}`,
         `Адрес: ${val(data, 'defendant_address')}`
       ])}
-      <div class="doc-title">ИСКОВОЕ ЗАЯВЛЕНИЕ<br>о перерасчёте платы за ЖКУ</div>
-      ${p(`Ответчик (${val(data, 'uk')}) неверно начислял/оказывал услуги ненадлежащего качества за период ${val(data, 'period')}.`)}
-      ${p(`Обстоятельства: ${val(data, 'facts')}.`)}
-      <div class="legal-ref">На основании ЖК РФ, Закона РФ «О защите прав потребителей» (по ситуации), ст. 131–132 ГПК РФ,</div>
+      <div class="doc-title">ИСКОВОЕ ЗАЯВЛЕНИЕ<br>о перерасчёте платы за жилищно-коммунальные услуги</div>
+      ${p(`Ответчик (${val(data, 'defendant')}) неверно производил начисления (оказывал услуги ненадлежащего качества/с перерывами) за период ${val(data, 'period')}. Обстоятельства: ${val(data, 'facts')}.`)}
+      ${p(`Претензия оставлена без удовлетворения.`)}
+      <div class="legal-ref">На основании ЖК РФ, ст. 29 Закона РФ «О защите прав потребителей», ст. 131–132 ГПК РФ,</div>
       <div class="request-title">ПРОШУ:</div>
       ${reqBlock([
-        `Обязать ответчика произвести перерасчёт платы за период ${val(data, 'period')}.`,
+        `Обязать ответчика произвести перерасчёт платы за указанный период в соответствии с законодательством.`,
         `Взыскать судебные расходы.`
       ])}
       ${signBlock(`Дата: ${new Date().toLocaleDateString('ru-RU')}`, `${val(data, 'plaintiff')} _________________`)}
     `
   },
+
   'claim-arb-debt-supply': {
     category: 'claim',
     title: 'О взыскании задолженности по договору поставки (АПК, ИП/ООО)',
@@ -860,17 +894,18 @@ window.externalTemplates = {
         `Цена иска: ${money(data, 'price')} руб.`
       ])}
       <div class="doc-title">ИСКОВОЕ ЗАЯВЛЕНИЕ (АПК РФ)<br>о взыскании задолженности по договору поставки</div>
-      ${p(`Между сторонами заключён договор поставки: ${val(data, 'contract')}. Ответчик нарушил обязанность по оплате.`)}
-      ${p(`Размер задолженности: ${money(data, 'debt')} руб. Досудебный порядок: ${val(data, 'pretrial')}.`)}
-      <div class="legal-ref">На основании ст. 309, 310, гл. 30 ГК РФ, ст. 4, 125–126 АПК РФ,</div>
+      ${p(`Между истцом и ответчиком заключён договор поставки ${val(data, 'contract')}. Истец надлежащим образом поставил товар, однако ответчик обязанность по оплате не исполнил.`)}
+      ${p(`Задолженность составляет ${money(data, 'debt')} руб. Досудебный порядок соблюдён: ${val(data, 'pretrial')}.`)}
+      <div class="legal-ref">На основании ст. 309, 310, 486, 516 ГК РФ, ст. 4, 125–126 АПК РФ,</div>
       <div class="request-title">ПРОШУ:</div>
       ${reqBlock([
-        `Взыскать задолженность ${money(data, 'debt')} руб.`,
+        `Взыскать с ответчика задолженность по договору поставки в размере ${money(data, 'debt')} руб.`,
         `Взыскать судебные расходы.`
       ])}
       ${signBlock(`Дата: ${new Date().toLocaleDateString('ru-RU')}`, `${val(data, 'plaintiff')} _________________`)}
     `
   },
+
   'claim-arb-debt-services': {
     category: 'claim',
     title: 'О взыскании задолженности по договору услуг (АПК, ИП/ООО)',
@@ -898,17 +933,18 @@ window.externalTemplates = {
         `Цена иска: ${money(data, 'price')} руб.`
       ])}
       <div class="doc-title">ИСКОВОЕ ЗАЯВЛЕНИЕ (АПК РФ)<br>о взыскании задолженности по договору услуг</div>
-      ${p(`Договор: ${val(data, 'contract')}. Услуги оказаны, что подтверждается: ${val(data, 'acts')}.`)}
-      ${p(`Ответчик оплату не произвёл. Досудебный порядок: ${val(data, 'pretrial')}.`)}
+      ${p(`Договор: ${val(data, 'contract')}. Услуги оказаны истцом надлежащим образом, что подтверждается ${val(data, 'acts')}.`)}
+      ${p(`Ответчик оплату не произвёл, задолженность составляет ${money(data, 'debt')} руб. Досудебный порядок: ${val(data, 'pretrial')}.`)}
       <div class="legal-ref">На основании ст. 309, 310, 781 ГК РФ, ст. 4, 125–126 АПК РФ,</div>
       <div class="request-title">ПРОШУ:</div>
       ${reqBlock([
-        `Взыскать задолженность ${money(data, 'debt')} руб.`,
+        `Взыскать с ответчика задолженность по договору услуг в размере ${money(data, 'debt')} руб.`,
         `Взыскать судебные расходы.`
       ])}
       ${signBlock(`Дата: ${new Date().toLocaleDateString('ru-RU')}`, `${val(data, 'plaintiff')} _________________`)}
     `
-  },
+  }
+};
 
   // ==================== ВОЗРАЖЕНИЯ (objection) ====================
   'objection-alimony': {
